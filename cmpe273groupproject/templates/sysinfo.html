@@ -1,0 +1,92 @@
+
+	<!DOCTYPE html>
+	<html>
+	<head>
+		    <meta charset="UTF-8">
+		    <title>Linux System Realtime Monitor</title>
+			<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/themes/metro/easyui.css') }}"> 
+			<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/themes/icon.css') }}"> 
+			<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/awsMonitor.css') }}"> 
+		    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+		    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.easyui.min.js') }}"></script>
+			<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.flot.min.js') }}"></script>	
+
+
+
+		<script>
+
+			$(document).ready(function(){
+
+				fetchData();
+
+				function fetchData(){
+					
+					$.ajax({
+						url:"/realtime_monitor/",
+						dataType:"json",
+						cache:false,
+						type:"get",
+						success: function(data) {
+							$("#CPU").text(parseInt(data.cpuUsage));
+							$("#usedMemory").text(parseInt(data.usedMemory));
+							$("#totalMemory").text(parseInt(data.totalMemory));
+							$("#diskReads").text(parseFloat(data.diskReads));
+							$("#diskWrites").text(parseFloat(data.diskWrites));
+							$("#networkIn").text(parseInt(data.networkInTotal));
+							$("#networkOut").text(parseInt(data.networkOutTotal));
+							$("#HTTPQPS").text(parseInt(data.HTTPQPS));
+						}
+					});
+
+					setTimeout(fetchData, 1000);
+			}
+			});
+		 </script>
+
+</head>
+<body>
+	<table>
+	    <thead>
+	        <tr>
+	            <th >CPU Utilization(%)</th>
+	            <th >Used Memory(MB)</th>
+	            <th >Total Memory(MB)</th>
+	            <th >Disk Reads(KB/S)</th>
+	            <th >Disk Writes(KB/S)</th>
+	            <th >NetworkIn(KB/S)</th>
+				<th >NetworkOut(KB/S)</th>
+				<th >HTTP Flow (QPS)</th>
+	        </tr>                          
+	    </thead>                           
+	    <tbody>                            
+	        <tr>                           
+	            <td id="CPU">0</td>            
+	            <td id="usedMemory">0</td>            
+	            <td id="totalMemory">0</td>            
+	            <td id="diskReads">0</td>            
+	            <td id="diskWrites">0</td>            
+	            <td id="networkIn">0</td>
+				<td id="networkOut">0</td> 
+				<td id="HTTPQPS">0</td>             
+	        </tr>                                                  
+	    </tbody>                           
+	</table>
+	
+	<br />
+	<br />
+	<a href="/startcpuspike">Start CPU spike</a>
+	<br />
+	<a href="/stopcpuspike">Stop CPU spike</a>
+	<br />
+	<a href="/startmemoryspike">Start Memory spike</a>
+	<br />
+	<a href="/stopmemoryspike">Stop Memory spike</a>
+	<br />
+	<a href="/startnetworkoutspike">Start networkout spike</a>
+	<br />
+	<a href="/startnetworkinspike">Start networkin spike</a>
+	<br />
+	<a href="/startrequestspike">Start request spike</a>
+
+</body>
+</html>   

@@ -1,0 +1,31 @@
+
+				
+
+				{% for account in accounts %}
+                <li>
+					<div class="tree-node">
+						<span class="tree-hit tree-expanded"></span>
+						<span class="tree-icon tree-folder tree-holder-open"></span>
+						<span class="tree-title">{{account}}</span>
+					</div>
+                    
+                    <ul style="display:block">
+						
+						{% for instance in accounts[account].instances %}
+                        <li>
+							<div class="tree-node">
+							
+							<span class="tree-indent"></span>
+							<span class="tree-icon tree-file"></span>
+							<span class="tree-title"><a href="#"  onclick='addTab("{{account}} instance NO.{{loop.index}}","/instance/{{account}}/{{loop.index-1}}/cpu/html/")'>{{ account}} instance NO.{{loop.index}}</a></span>
+							
+						</div>
+						
+						</li>	
+                     	{% endfor %}
+                    </ul>
+					
+					
+                </li>
+				<hr />
+				{% endfor %}

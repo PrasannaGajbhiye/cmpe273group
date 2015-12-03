@@ -1,0 +1,212 @@
+
+	<!DOCTYPE html>
+	<html>
+	<head>
+		    <meta charset="UTF-8">
+		    <title>Account:{{account_name}}-- instance_no:{{instance_no}}</title>
+			<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/themes/metro/easyui.css') }}"> 
+			<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/themes/icon.css') }}"> 
+			<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/awsMonitor.css') }}"> 
+		    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+		    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.easyui.min.js') }}"></script>
+			<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.flot.min.js') }}"></script>
+			<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.flot.resize.min.js') }}"></script>	
+			<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.canvasjs.min.js') }}"></script>	
+
+
+
+		<script>
+
+			$(document).ready(function(){
+
+				
+				// alert("{{instance_address}}");
+			plotAll();
+				
+			function plotAll() {
+				plotMerit("{{account_name}}{{instance_no}}cpu",0, 70, 100, "Percentage","{{instance_address}}/cpu");
+				plotMerit("{{account_name}}{{instance_no}}memory", 0, 800, 1000,"MB","{{instance_address}}/memory" );
+				plotMerit("{{account_name}}{{instance_no}}networkin", 0, 200, 500, "KB/S", "{{instance_address}}/networkin");
+				plotMerit("{{account_name}}{{instance_no}}networkout", 0, 600, 1000, "KB/S", "{{instance_address}}/networkout");
+				plotMerit("{{account_name}}{{instance_no}}diskreads", 0, 1000,2000,"KB/S", "{{instance_address}}/diskreads");
+				plotMerit("{{account_name}}{{instance_no}}diskwrites", 0, 1000,2000,"KB/S", "{{instance_address}}/diskwrites");
+				plotMerit("{{account_name}}{{instance_no}}httpqps", 0, 800,1000,"Visits/Second", "{{instance_address}}/HTTPQPS");
+				// alert("{{instance_address}}/memory");
+			}
+			
+			function plotMerit(merit, seed, alarmLevel, maxY, unitY, jsonURL){
+				var X = [];
+				var Y = [];
+				var secondsPast = 0;
+				var read = 0;
+
+				drawPlot();
+
+				function drawPlot(){
+					
+					$.ajax({
+						url:jsonURL,
+						dataType:"json",
+						cache:false,
+						type:"get",
+						success: function(data) {
+							// alert(data);
+							var rawRead = parseFloat(data.Datapoints[0].Maximum);
+							// alert(rawRead);
+							if (!isNaN(rawRead)) {
+								read = rawRead;
+							}
+							// console.log(read);
+						}
+					});
+					console.log(read);
+					// read *= 50;
+
+					
+					
+					secondsPast += 1;
+					X.push([secondsPast, read]);
+					Y.push([secondsPast, alarmLevel]);
+
+					if (X.length > 60){
+
+						X.shift();
+						Y.shift();
+					}
+					// $("#" +merit).css({"width":"310px","height":"220px"});
+					// $plot.width("310");
+// 					$plot.height("220");
+				$.plot($("#" +merit), [X,Y], {
+					
+					
+					
+				    grid: {
+				        borderWidth: 1,
+				        minBorderMargin: 5,
+				        labelMargin: 2,
+				        // backgroundColor: {
+				        //     colors: ["#fff", "#e4f4f4"]
+				        // }//,
+				        margin: {
+				            top: 1,
+				            bottom: 5,
+				            left: 2
+				        }
+				    },
+				    yaxis: {
+				        labelWidth: 30,
+						max:maxY,
+						min:0
+				    },
+				    xaxis: {
+				        labelHeight: 30,
+				    },
+				    legend: {
+				        show: true
+				    },
+					colors:["green","red"]
+				});
+				// defining the style of axis and their coordinate labels
+				var xaxisLabel = $("<div class='axisLabel xaxisLabel'></div>").text("Elapsed Time").appendTo($('#' + merit));
+				var yaxisLabel = $("<div class='axisLabel yaxisLabel'></div>").text(unitY).appendTo($('#' + merit));
+				yaxisLabel.css("margin-top",yaxisLabel.width() / 2 - 20);
+				setTimeout(drawPlot, 1000);
+			}
+		}
+			});
+	//
+	//
+			$(document).ready(function(){
+				
+				// $(".plot-windows").panel({
+				// 	onMaximize:function(){
+				//
+				// 	$(".plot-windows").not(this).window('close');
+				// 	$(this).window('refresh', "http://localhost:5000/longperiod/instance/{{account_name}}/{{instance_no}}/{{metric}}/");
+				// 	},
+				//
+				// 	onRestore:function(){
+				// 	$(".plot-windows").not(this).window('open');
+				// 	plotAll();
+				// 	}
+				// });
+				
+				$(".plot-windows").click(function(){
+					window.open("http://localhost:5000/longperiod/instance/{{account_name}}/{{instance_no}}/");
+				});
+				
+			});
+			
+		</script>
+
+	<div  class="easyui-layout" fit="true">
+		<div region="center" border="false" border="false">
+
+
+					    <div style="position:relative;width:100%;height:100%;border:1px solid #ccc;overflow:auto; " >
+					        <div class="easyui-window plot-windows" data-options="{title:'CPU',inline:true, left:10,top:10}" style="width:350px;height:250px;padding:0px">
+
+								<div id="{{account_name}}{{instance_no}}cpu" style="width:310px;height:220px;">
+					            <!-- CPU percentage in real time. -->
+								
+								</div>
+
+					        </div>
+					        <div class="easyui-window plot-windows" data-options="{title:'Memory',inline:true, top:10,left:370}" style="width:350px;height:250px;padding:0px">
+							<div id="{{account_name}}{{instance_no}}memory" style="width:310px;height:220px;">
+					            <!-- Memory percentage in real time. -->
+							</div>
+					        </div>
+					        <div class="easyui-window plot-windows" data-options="{title:'NetworkIn',inline:true,top:10,left:730}" style="width:350px;height:250px;padding:0px">
+								<div id="{{account_name}}{{instance_no}}networkin" style="width:310px;height:220px;">
+					            <!-- Network percentage in real time. -->
+								</div>
+					        </div>
+					        <div class="easyui-window plot-windows" data-options="{title:'NetworkOut',inline:true,top:280,left:10}" style="width:350px;height:250px;padding:0px">
+								<div id="{{account_name}}{{instance_no}}networkout" style="width:310px;height:220px;">
+					            <!-- Network percentage in real time. -->
+								</div>
+					        </div>
+							
+					        <div class="easyui-window plot-windows" data-options="{title:'DiskReads',inline:true, top:280,left:370}" style="width:350px;height:250px;padding:0px">
+								<div id="{{account_name}}{{instance_no}}diskreads" style="width:310px;height:220px;">
+					            <!-- I/O percentage in real time. -->
+							</div>
+					        </div>
+							
+					        <div class="easyui-window plot-windows" data-options="{title:'DiskWrites',inline:true, top:280,left:730}" style="width:350px;height:250px;padding:0px">
+								<div id="{{account_name}}{{instance_no}}diskwrites" style="width:310px;height:220px;">
+					            <!-- I/O percentage in real time. -->
+							</div>
+					        </div>
+							
+					        <div class="easyui-window plot-windows" data-options="{title:'HTTP QPS',inline:true, top:550,left:10}" style="width:350px;height:250px;padding:0px">
+								<div id="{{account_name}}{{instance_no}}httpqps" style="width:310px;height:220px;">
+					            <!-- Resource percentage in real time. -->
+							</div>
+					        </div>
+					        <div class="easyui-window plot-windows" data-options="{title:'Spikes',inline:true,top:550,left:370}" style="width:350px;height:250px;padding:10px">
+								<div id="{{account_name}}{{instance_no}}spikes" style="width:310px;height:220px;">
+								<br />
+								<br />
+								<a href="{{instance_address}}/startcpuspike">Start CPU spike</a>
+								<br />
+								<a href="{{instance_address}}/stopcpuspike">Stop CPU spike</a>
+								<br />
+								<a href="{{instance_address}}/startmemoryspike">Start Memory spike</a>
+								<br />
+								<a href="{{instance_address}}/stopmemoryspike">Stop Memory spike</a>
+								<br />
+								<a href="{{instance_address}}/startnetworkoutspike">Start networkout spike</a>
+								<br />
+								<a href="{{instance_address}}/startnetworkinspike">Start networkin spike</a>
+								<br />
+								<a href="{{instance_address}}/startrequestspike">Start request spike</a>
+							</div>
+					        </div>
+					    </div>
+				        </div>
+				    </div>
+
+</body>
+</html>   

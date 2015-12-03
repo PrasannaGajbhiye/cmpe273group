@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+	    <meta charset="UTF-8">
+	    <title>AWS EC2 Monitor</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/themes/metro/easyui.css') }}"> 
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/themes/icon.css') }}"> 
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/awsMonitor.css') }}"> 
+	    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+	    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.easyui.min.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.flot.min.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.canvasjs.min.js') }}"></script>	
+
+		
+
+		<script>
+			function addTab(title, url){
+			    if ($('#tt').tabs('exists', title)){
+			        $('#tt').tabs('select', title);
+			    } else {
+			        var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:100%;"></iframe>';
+			        $('#tt').tabs('add',{
+			            title:title,
+			            content:content,
+			            closable:true
+			        });
+			    }
+			}
+			
+			$.extend($.fn.window.defaults, {
+				onMove: function(left,top){
+					if (left<0){
+						$(this).window('move',{
+							left:0
+						});;
+					}
+					if (top < 0){
+						$(this).window('move',{
+							top:0
+						});;
+					}
+				}
+			});
+		</script>
+			
+
+
+		<script>
+
+			$(document).ready(function(){
+				var metrics={cpu:"CPUUtilization", memory:"Memory",networkIn:"NetworkIn", networkOut:"NetworkOut" };
+				
+				
+				plotMerit("cpu",0, 70, 100, "Percentage","/instance/ML/0/cpu/json");
+				// plotMerit("memory", 0, 800, 1000,"MB","/instance/{{account_name}}/{{instance_no}}/{{metric}}/json");
+				plotMerit("network", 0, 200000, 500000, "B/S","/instance/ML/0/networkOut/json");
+				plotMerit("io", 0, 5000,10000,"B/S","/instance/ML/0/diskRead/json");
+				// plotMerit("resource", 0, 700,1000,"Visits/Second", "/instance/{{account_name}}/{{instance_no}}/{{metric}}/json");
+			
+			function plotMerit(merit, seed, alarmLevel, maxY, unitY, jsonURL){
+				var X = [];
+				var Y = [];
+				var secondsPast = 0;
+				var read = 0;
+
+				drawPlot();
+				
+				function drawPlot(){
+					
+					$.ajax({
+						url:jsonURL,
+						dataType:"json",
+						cache:false,
+						type:"get",
+						success: function(data) {
+							var rawRead = parseFloat(data.Datapoints[0].Maximum);
+							// alert(rawRead)
+							if (!isNaN(rawRead)) {
+								read = rawRead;
+							}
+							// console.log(read);
+						}
+					});
+					console.log(read);
+					// read *= 50;
+
+					
+					
+					secondsPast += 1;
+					X.push([secondsPast, read]);
+					Y.push([secondsPast, alarmLevel]);
+
+					if (X.length > 60){
+
+						X.shift();
+						Y.shift();
+					}
+
+				$.plot($("#" +merit), [X,Y], {
+				    grid: {
+				        borderWidth: 1,
+				        minBorderMargin: 5,
+				        labelMargin: 2,
+				        // backgroundColor: {
+				        //     colors: ["#fff", "#e4f4f4"]
+				        // }//,
+				        margin: {
+				            top: 1,
+				            bottom: 5,
+				            left: 2
+				        }
+				    },
+				    yaxis: {
+				        labelWidth: 30,
+						max:maxY,
+						min:0
+				    },
+				    xaxis: {
+				        labelHeight: 30,
+				    },
+				    legend: {
+				        show: true
+				    },
+					colors:["green","red"]
+				});
+				// defining the style of axis and their coordinate labels
+				var xaxisLabel = $("<div class='axisLabel xaxisLabel'></div>").text("Elapsed Time").appendTo($('#' + merit));
+				var yaxisLabel = $("<div class='axisLabel yaxisLabel'></div>").text(unitY).appendTo($('#' + merit));
+				yaxisLabel.css("margin-top",yaxisLabel.width() / 2 - 20);
+				setTimeout(drawPlot, 1000);
+			}
+		}
+			});
+		 </script>
+			
+		<script>
+			$(document).ready(function(){
+				$(".modalwindow").click(function(){
+					setTimeout(function(){$('.modaldialog').window('close');}, 1000);
+				});
+				
+				$(".account").form({
+					success:function(data){
+						
+						$("#accountmanager").load("/accounts/", function(){
+        						$("#accountmanager").removeClass("easyui-tree");
+								$("#accountmanager").addClass("easyui-tree");
+								
+    					});
+						
+						
+						
+					}
+				});
+			});
+		</script>
+
+
+
+</head>
+<body>
+    
+
+	<div  class="easyui-layout" fit="true">
+        <div  title="Instances by Accounts" region="west" split="true" style="width:0px;padding:0px 0 10px 0;">
+            <ul id="accountmanager" class="easyui-tree">
+
+					
+				{% for account in accounts %}
+                <li>
+					
+                    <span>{{account}}</span>
+                    <ul>
+						{% for instance in accounts[account].instances %}
+                        <li><span><a href="#"  onclick='addTab("{{account}} instance NO.{{loop.index}}","/instance/{{account}}/{{loop.index-1}}/cpu/html/")'>{{ account}} instance NO.{{loop.index}}</a></span></li>
+                     	{% endfor %}
+                    </ul>
+					
+                </li>
+				{% endfor %}
+            </ul> 
+			<br /><br />
+			<hr />
+			<div >
+				
+					<center>
+						<a href="#" id="addaccount" class="easyui-linkbutton" iconCls="icon-add"  onclick="$('#addaccountform').window('open')">Add account</a> <br /><br />
+						<a href="#" id="addinstance" class="easyui-linkbutton" iconCls="icon-add" onclick="$('#addinstanceform').window('open')">Add instance</a>
+					</center>
+				
+
+				
+			</div>
+        </div>
+        <div region="center" border="false" border="false">
+            <div id="tt" class="easyui-tabs" fit="true">
+                <div title="Summary" style="padding:10px;">
+					    <div style="position:relative;width:100%;height:100%;border:1px solid #ccc;overflow:auto; " >
+					        <div class="easyui-window plot-windows" data-options="title:'CPU',inline:true, left:10,top:10" style="width:350px;height:250px;padding:0px">
+
+								<div id="cpu" style="width:310px;height:220px;">
+					            <!-- CPU percentage in real time. -->
+								
+								</div>
+
+					        </div>
+					        <div class="easyui-window plot-windows" data-options="title:'Memory',inline:true, top:10,left:370" style="width:350px;height:250px;padding:0px">
+							<div id="memory" style="width:310px;height:220px;">
+					            <!-- Memory percentage in real time. -->
+							</div>
+					        </div>
+					        <div class="easyui-window plot-windows" data-options="title:'Network',inline:true,top:10,left:730" style="width:350px;height:250px;padding:0px">
+								<div id="network" style="width:310px;height:220px;">
+					            <!-- Network percentage in real time. -->
+							</div>
+					        </div>
+							
+					        <div class="easyui-window plot-windows" data-options="title:'I/O',inline:true, top:280,left:10," style="width:350px;height:250px;padding:0px">
+								<div id="io" style="width:310px;height:220px;">
+					            <!-- I/O percentage in real time. -->
+							</div>
+					        </div>
+					        <div class="easyui-window plot-windows" data-options="title:'Resource',inline:true, top:280,left:370" style="width:350px;height:250px;padding:0px">
+								<div id="resource" style="width:310px;height:220px;">
+					            <!-- Resource percentage in real time. -->
+							</div>
+					        </div>
+					        <div class="easyui-window plot-windows" data-options="title:'Warnning',inline:true,top:280,left:730" style="width:350px;height:250px;padding:10px">
+								<div id="warning" style="width:310px;height:220px;">
+					            Currently no warnings. Everything looks fine.
+							</div>
+							
+							
+							
+		 				   <div id="addaccountform" class="easyui-window modaldialog" title="Add account" data-options="modal:true,closed:true" style="width:500px;height:300px;padding:10px;">
+		 						<form class="account" action="/account/" method="POST">
+		 							
+		 	                           <label>Account Name:</label><input type="text" name="account_name"  placeholder="A name used to save account information." size="35" >*<br />
+		 	                           <label>AWS access key id:</label><input type="text" name="aws_access_key_id"  placeholder="The AWS access key id of your account." size="35" >* <br />
+									   <label>AWS secret access key:</label><input type="text" name="aws_secret_access_key"  placeholder="The AWS secret access key of your account."  size="35">*<br />
+									   <label>Instance ID:</label><input type="text" name="instance_id"  placeholder="Instance ID of your instance, you can add later" size="35"><br />
+									   <label>Region Name:</label><input type="text" name="region_name"  placeholder="The region name of your account." size="35">*<br />
+									   <label>.</label><input class="modalwindow" type="submit"  value="Add Account" >
+		 							
+		 						</form>
+					
+		 					</div>
+					
+		  				   <div id="addinstanceform" class="easyui-window modaldialog" title="Add instance" data-options="modal:true,closed:true" style="width:500px;height:300px;padding:10px;">
+		 						<form class="account" action="/instance/" method="POST">
+									<br /><br />
+	 	                           <label>Account Name:</label><input type="text" name="account_name"  placeholder="A name used to save account information." size="35" >*<br />
+	 	
+								   <label>Instance ID: </label><input type="text" name="instance_id"  placeholder="Instance ID of your instance" size="35" ><br />
+
+								   <label>.</label><input class="modalwindow" type="submit"  value="Add Instance" >
+								   
+		 						</form>
+					
+		 					</div>
+							
+							
+							
+					        </div>
+					    </div>
+                    
+                </div>
+				
+                <!-- <div title="Contacts" data-options="closable:true" style="padding:10px;">
+                    No contact data.
+                </div> -->
+            </div>
+        </div>
+        <div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+
+        </div>
+    </div>
+</body>
+</html>
