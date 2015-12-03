@@ -1,0 +1,811 @@
+{
+  "id": 2,
+  "title": "AWS Monitoring",
+  "originalTitle": "AWS Monitoring",
+  "tags": [],
+  "style": "dark",
+  "timezone": "browser",
+  "editable": true,
+  "hideControls": false,
+  "sharedCrosshair": false,
+  "rows": [
+    {
+      "collapse": false,
+      "editable": true,
+      "height": "250px",
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "leftLogBase": 1,
+            "leftMax": null,
+            "leftMin": null,
+            "rightLogBase": 1,
+            "rightMax": null,
+            "rightMin": null,
+            "threshold1": 80,
+            "threshold1Color": "rgba(253, 0, 0, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 2,
+          "leftYAxisLabel": "CPU Utilization",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [
+            {
+              "dashUri": "db/cpu-utilization",
+              "dashboard": "CPU-Utilization",
+              "keepTime": true,
+              "targetBlank": true,
+              "title": "CPU-Utilization",
+              "type": "dashboard"
+            }
+          ],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 12,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "i-7039b7c2",
+              "fields": [
+                {
+                  "asExpr": "instance1",
+                  "func": "distinct",
+                  "name": "Maximum"
+                }
+              ],
+              "groupBy": [
+                {
+                  "interval": "auto",
+                  "type": "time"
+                }
+              ],
+              "hide": false,
+              "measurement": "cpuUtilizationWithTags",
+              "query": "SELECT distinct(\"Maximum\") AS \"instance1\" FROM \"cpuUtilizationWithTags\" WHERE \"Instance-ID\" = 'i-7039b7c2' AND $timeFilter GROUP BY time($interval)",
+              "rawQuery": false,
+              "refId": "A",
+              "tags": [
+                {
+                  "key": "Instance-ID",
+                  "operator": "=",
+                  "value": "i-7039b7c2"
+                }
+              ]
+            },
+            {
+              "alias": "i-9d930f44",
+              "fields": [
+                {
+                  "func": "distinct",
+                  "name": "Maximum"
+                }
+              ],
+              "groupBy": [
+                {
+                  "interval": "auto",
+                  "type": "time"
+                }
+              ],
+              "measurement": "cpuUtilizationWithTags",
+              "query": "SELECT distinct(\"Maximum\") AS \"Maximum\" FROM \"cpuUtilizationWithTags\" WHERE \"Instance-ID\" = 'i-9d930f44' AND $timeFilter GROUP BY time($interval)",
+              "refId": "B",
+              "tags": [
+                {
+                  "key": "Instance-ID",
+                  "operator": "=",
+                  "value": "i-9d930f44"
+                }
+              ]
+            },
+            {
+              "alias": "i-104dd3c9",
+              "fields": [
+                {
+                  "func": "distinct",
+                  "name": "Maximum"
+                }
+              ],
+              "groupBy": [
+                {
+                  "interval": "auto",
+                  "type": "time"
+                }
+              ],
+              "measurement": "cpuUtilizationWithTags",
+              "query": "SELECT distinct(\"Maximum\") AS \"Maximum\" FROM \"cpuUtilizationWithTags\" WHERE \"Instance-ID\" = 'i-104dd3c9' AND $timeFilter GROUP BY time($interval)",
+              "refId": "C",
+              "tags": [
+                {
+                  "key": "Instance-ID",
+                  "operator": "=",
+                  "value": "i-104dd3c9"
+                }
+              ]
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "CPU Utilization",
+          "tooltip": {
+            "shared": true,
+            "value_type": "cumulative"
+          },
+          "type": "graph",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "percent",
+            "short"
+          ]
+        }
+      ],
+      "title": "Row"
+    },
+    {
+      "collapse": false,
+      "editable": true,
+      "height": "250px",
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "leftLogBase": 1,
+            "leftMax": null,
+            "leftMin": null,
+            "rightLogBase": 1,
+            "rightMax": null,
+            "rightMin": null,
+            "threshold1": 26500000,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 3,
+          "leftYAxisLabel": "Network In",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [
+            {
+              "dashUri": "db/network-input",
+              "dashboard": "Network Input",
+              "keepTime": true,
+              "targetBlank": true,
+              "title": "Network Input",
+              "type": "dashboard"
+            }
+          ],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 12,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "i-7039b7c2",
+              "fields": [
+                {
+                  "func": "distinct",
+                  "name": "Maximum"
+                }
+              ],
+              "groupBy": [
+                {
+                  "interval": "auto",
+                  "type": "time"
+                }
+              ],
+              "measurement": "networkIn",
+              "query": "SELECT distinct(\"Maximum\") AS \"Maximum\" FROM \"networkIn\" WHERE \"Instance-ID\" = 'i-7039b7c2' AND $timeFilter GROUP BY time($interval)",
+              "refId": "A",
+              "tags": [
+                {
+                  "key": "Instance-ID",
+                  "operator": "=",
+                  "value": "i-7039b7c2"
+                }
+              ]
+            },
+            {
+              "alias": "i-9d930f44",
+              "fields": [
+                {
+                  "func": "distinct",
+                  "name": "Maximum"
+                }
+              ],
+              "groupBy": [
+                {
+                  "interval": "auto",
+                  "type": "time"
+                }
+              ],
+              "measurement": "networkIn",
+              "query": "SELECT distinct(\"Maximum\") AS \"Maximum\" FROM \"networkIn\" WHERE \"Instance-ID\" = 'i-9d930f44' AND $timeFilter GROUP BY time($interval)",
+              "refId": "B",
+              "tags": [
+                {
+                  "key": "Instance-ID",
+                  "operator": "=",
+                  "value": "i-9d930f44"
+                }
+              ]
+            },
+            {
+              "alias": "i-104dd3c9",
+              "fields": [
+                {
+                  "func": "distinct",
+                  "name": "Maximum"
+                }
+              ],
+              "groupBy": [
+                {
+                  "interval": "auto",
+                  "type": "time"
+                }
+              ],
+              "measurement": "networkIn",
+              "query": "SELECT distinct(\"Maximum\") AS \"Maximum\" FROM \"networkIn\" WHERE \"Instance-ID\" = 'i-104dd3c9' AND $timeFilter GROUP BY time($interval)",
+              "refId": "C",
+              "tags": [
+                {
+                  "key": "Instance-ID",
+                  "operator": "=",
+                  "value": "i-104dd3c9"
+                }
+              ]
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Network Input",
+          "tooltip": {
+            "shared": true,
+            "value_type": "cumulative"
+          },
+          "type": "graph",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "bytes",
+            "short"
+          ]
+        }
+      ],
+      "title": "New row"
+    },
+    {
+      "collapse": false,
+      "editable": true,
+      "height": "250px",
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "leftLogBase": 1,
+            "leftMax": null,
+            "leftMin": null,
+            "rightLogBase": 1,
+            "rightMax": null,
+            "rightMin": null,
+            "threshold1": 500000,
+            "threshold1Color": "rgba(184, 0, 0, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 4,
+          "leftYAxisLabel": "Network Out",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [
+            {
+              "dashUri": "db/network-output",
+              "dashboard": "Network Output",
+              "keepTime": true,
+              "targetBlank": true,
+              "title": "Network Output",
+              "type": "dashboard"
+            }
+          ],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 12,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "i-7039b7c2",
+              "fields": [
+                {
+                  "func": "distinct",
+                  "name": "Maximum"
+                }
+              ],
+              "groupBy": [
+                {
+                  "interval": "auto",
+                  "type": "time"
+                }
+              ],
+              "measurement": "networkOut",
+              "query": "SELECT distinct(\"Maximum\") AS \"Maximum\" FROM \"networkOut\" WHERE \"Instance-ID\" = 'i-7039b7c2' AND $timeFilter GROUP BY time($interval)",
+              "refId": "A",
+              "tags": [
+                {
+                  "key": "Instance-ID",
+                  "operator": "=",
+                  "value": "i-7039b7c2"
+                }
+              ]
+            },
+            {
+              "alias": "i-9d930f44",
+              "fields": [
+                {
+                  "func": "distinct",
+                  "name": "Maximum"
+                }
+              ],
+              "groupBy": [
+                {
+                  "interval": "auto",
+                  "type": "time"
+                }
+              ],
+              "measurement": "networkOut",
+              "query": "SELECT distinct(\"Maximum\") AS \"Maximum\" FROM \"networkOut\" WHERE \"Instance-ID\" = 'i-9d930f44' AND $timeFilter GROUP BY time($interval)",
+              "refId": "B",
+              "tags": [
+                {
+                  "key": "Instance-ID",
+                  "operator": "=",
+                  "value": "i-9d930f44"
+                }
+              ]
+            },
+            {
+              "alias": "i-104dd3c9",
+              "fields": [
+                {
+                  "func": "mean",
+                  "name": "value"
+                }
+              ],
+              "groupBy": [
+                {
+                  "interval": "auto",
+                  "type": "time"
+                }
+              ],
+              "measurement": "networkOut",
+              "query": "SELECT mean(\"value\") AS \"value\" FROM \"networkOut\" WHERE \"Instance-ID\" = 'i-104dd3c9' AND $timeFilter GROUP BY time($interval)",
+              "refId": "C",
+              "tags": [
+                {
+                  "key": "Instance-ID",
+                  "operator": "=",
+                  "value": "i-104dd3c9"
+                }
+              ]
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Network Output",
+          "tooltip": {
+            "shared": true,
+            "value_type": "cumulative"
+          },
+          "type": "graph",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "bytes",
+            "short"
+          ]
+        }
+      ],
+      "title": "New row"
+    },
+    {
+      "collapse": false,
+      "editable": true,
+      "height": "250px",
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "leftLogBase": 1,
+            "leftMax": null,
+            "leftMin": null,
+            "rightLogBase": 1,
+            "rightMax": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 5,
+          "leftYAxisLabel": "Disk Read Bytes",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [
+            {
+              "dashUri": "db/disk-read-bytes",
+              "dashboard": "Disk Read Bytes",
+              "keepTime": true,
+              "targetBlank": true,
+              "title": "Disk Read Bytes",
+              "type": "dashboard"
+            }
+          ],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 12,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "i-7039b7c2",
+              "fields": [
+                {
+                  "func": "distinct",
+                  "name": "Maximum"
+                }
+              ],
+              "groupBy": [
+                {
+                  "interval": "auto",
+                  "type": "time"
+                }
+              ],
+              "measurement": "diskReadBytes",
+              "query": "SELECT distinct(\"Maximum\") AS \"Maximum\" FROM \"diskReadBytes\" WHERE \"Instance-ID\" = 'i-7039b7c2' AND $timeFilter GROUP BY time($interval)",
+              "refId": "A",
+              "tags": [
+                {
+                  "key": "Instance-ID",
+                  "operator": "=",
+                  "value": "i-7039b7c2"
+                }
+              ]
+            },
+            {
+              "alias": "i-9d930f44",
+              "fields": [
+                {
+                  "func": "distinct",
+                  "name": "Maximum"
+                }
+              ],
+              "groupBy": [
+                {
+                  "interval": "auto",
+                  "type": "time"
+                }
+              ],
+              "measurement": "diskReadBytes",
+              "query": "SELECT distinct(\"Maximum\") AS \"Maximum\" FROM \"diskReadBytes\" WHERE \"Instance-ID\" = 'i-9d930f44' AND $timeFilter GROUP BY time($interval)",
+              "refId": "B",
+              "tags": [
+                {
+                  "key": "Instance-ID",
+                  "operator": "=",
+                  "value": "i-9d930f44"
+                }
+              ]
+            },
+            {
+              "alias": "i-104dd3c9",
+              "fields": [
+                {
+                  "func": "distinct",
+                  "name": "Maximum"
+                }
+              ],
+              "groupBy": [
+                {
+                  "interval": "auto",
+                  "type": "time"
+                }
+              ],
+              "measurement": "diskReadBytes",
+              "query": "SELECT distinct(\"Maximum\") AS \"Maximum\" FROM \"diskReadBytes\" WHERE \"Instance-ID\" = 'i-104dd3c9' AND $timeFilter GROUP BY time($interval)",
+              "refId": "C",
+              "tags": [
+                {
+                  "key": "Instance-ID",
+                  "operator": "=",
+                  "value": "i-104dd3c9"
+                }
+              ]
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Disk Read Bytes",
+          "tooltip": {
+            "shared": true,
+            "value_type": "cumulative"
+          },
+          "type": "graph",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "bytes",
+            "short"
+          ]
+        }
+      ],
+      "title": "New row"
+    },
+    {
+      "collapse": false,
+      "editable": true,
+      "height": "250px",
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "leftLogBase": 1,
+            "leftMax": null,
+            "leftMin": null,
+            "rightLogBase": 1,
+            "rightMax": null,
+            "rightMin": null,
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 6,
+          "leftYAxisLabel": "Disk Write Bytes",
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [
+            {
+              "dashUri": "db/disk-write-bytes",
+              "dashboard": "Disk Write Bytes",
+              "keepTime": true,
+              "targetBlank": true,
+              "title": "Disk Write Bytes",
+              "type": "dashboard"
+            }
+          ],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 12,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "i-7039b7c2",
+              "fields": [
+                {
+                  "func": "distinct",
+                  "name": "Maximum"
+                }
+              ],
+              "groupBy": [
+                {
+                  "interval": "auto",
+                  "type": "time"
+                }
+              ],
+              "measurement": "diskWriteBytes",
+              "query": "SELECT distinct(\"Maximum\") AS \"Maximum\" FROM \"diskWriteBytes\" WHERE \"Instance-ID\" = 'i-7039b7c2' AND $timeFilter GROUP BY time($interval)",
+              "refId": "A",
+              "tags": [
+                {
+                  "key": "Instance-ID",
+                  "operator": "=",
+                  "value": "i-7039b7c2"
+                }
+              ]
+            },
+            {
+              "alias": "i-9d930f44",
+              "fields": [
+                {
+                  "func": "distinct",
+                  "name": "Maximum"
+                }
+              ],
+              "groupBy": [
+                {
+                  "interval": "auto",
+                  "type": "time"
+                }
+              ],
+              "measurement": "diskWriteBytes",
+              "query": "SELECT distinct(\"Maximum\") AS \"Maximum\" FROM \"diskWriteBytes\" WHERE \"Instance-ID\" = 'i-9d930f44' AND $timeFilter GROUP BY time($interval)",
+              "refId": "B",
+              "tags": [
+                {
+                  "key": "Instance-ID",
+                  "operator": "=",
+                  "value": "i-9d930f44"
+                }
+              ]
+            },
+            {
+              "alias": "i-104dd3c9",
+              "fields": [
+                {
+                  "func": "distinct",
+                  "name": "Maximum"
+                }
+              ],
+              "groupBy": [
+                {
+                  "interval": "auto",
+                  "type": "time"
+                }
+              ],
+              "measurement": "diskWriteBytes",
+              "query": "SELECT distinct(\"Maximum\") AS \"Maximum\" FROM \"diskWriteBytes\" WHERE \"Instance-ID\" = 'i-104dd3c9' AND $timeFilter GROUP BY time($interval)",
+              "refId": "C",
+              "tags": [
+                {
+                  "key": "Instance-ID",
+                  "operator": "=",
+                  "value": "i-104dd3c9"
+                }
+              ]
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Disk Write Bytes",
+          "tooltip": {
+            "shared": true,
+            "value_type": "cumulative"
+          },
+          "type": "graph",
+          "x-axis": true,
+          "y-axis": true,
+          "y_formats": [
+            "bytes",
+            "short"
+          ]
+        }
+      ],
+      "title": "New row"
+    }
+  ],
+  "time": {
+    "from": "now/d",
+    "to": "now/d"
+  },
+  "timepicker": {
+    "now": true,
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "refresh": "1m",
+  "schemaVersion": 7,
+  "version": 16,
+  "links": []
+}
